@@ -51,3 +51,37 @@ const closeModalByEscKey = evt => {
     resetAttribute();
   }
 };
+const moveToLeft = evt => {
+  if (evt.code === 'ArrowLeft') {
+    indexOfOriginalLink > 0
+      ? (refs.modalImage.src = originalLinks[(indexOfOriginalLink -= 1)])
+      : (refs.modalImage.src =
+          originalLinks[(indexOfOriginalLink = originalLinks.length - 1)]);
+  }
+};
+
+const moveToRight = evt => {
+  if (evt.code === 'ArrowRight') {
+    indexOfOriginalLink < originalLinks.length - 1
+      ? (refs.modalImage.src = originalLinks[(indexOfOriginalLink += 1)])
+      : (refs.modalImage.src = originalLinks[(indexOfOriginalLink = 0)]);
+  }
+};
+
+const arrowNavigation = evt => {
+  if (!refs.previewContainer.classList.contains('is-open')) {
+    return;
+  }
+  moveToLeft(evt);
+  moveToRight(evt);
+};
+
+refs.galleryList.insertAdjacentHTML('beforeend', generateGallery);
+refs.galleryList.addEventListener('click', evt => {
+  evt.preventDefault();
+  modalOpen(evt);
+});
+refs.modalCloseButton.addEventListener('click', closeModal);
+refs.previewContainerOverlay.addEventListener('click', closeModal);
+window.addEventListener('keydown', closeModalByEscKey);
+window.addEventListener('keydown', arrowNavigation);
